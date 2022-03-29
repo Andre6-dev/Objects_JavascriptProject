@@ -24,8 +24,9 @@ const renderMovies = (filter = '') => {
         const movieEl = document.createElement('li');
         const { info, ...otherProps } = movie; // Object Destructuring
         console.log(otherProps);
-        const { title: movieTitle } = info;
-        let text = movieTitle + ' - ';
+        // const { title: movieTitle } = info;
+        // const { getFormattedTitle } = movie;
+        let text = movie.getFormattedTitle() + ' - ';
         // This for loop allow us to iterate the object to extract extraName and extraValue
         for (const key in info) {
             // if key is not in the title property
@@ -56,7 +57,10 @@ const addMovieHandler = () => {
             title,
             [extraName]: extraValue
         },
-        id: Math.random().toString()
+        id: Math.random().toString(),
+        getFormattedTitle: function () {
+            return this.info.title.toUpperCase(); // Using this to set property to format our title.
+        }
     };
 
     movies.push(newMovie);
