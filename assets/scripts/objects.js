@@ -25,12 +25,15 @@ const renderMovies = (filter = '') => {
         const { info, ...otherProps } = movie; // Object Destructuring
         console.log(otherProps);
         // const { title: movieTitle } = info;
-        // const { getFormattedTitle } = movie;
-        let text = movie.getFormattedTitle() + ' - ';
+        let { getFormattedTitle } = movie;
+        // getFormattedTitle = getFormattedTitle.bind(movie)
+
+        let text = getFormattedTitle.call(movie) + ' - '; // This call() refers to "this" object in this case it will be movie
+
         // This for loop allow us to iterate the object to extract extraName and extraValue
         for (const key in info) {
             // if key is not in the title property
-            if (key !== 'title') {
+            if (key !== 'title' && key !== '_title') {
                 // key here is the extraName and in the key's info is extraValue
                 text = text + `${key}: ${info[key]}`;
             }
@@ -46,22 +49,33 @@ const addMovieHandler = () => {
     const extraName = document.getElementById('extra-name').value;
     const extraValue = document.getElementById('extra-value').value;
 
-    if (title.trim() === '' ||
-        extraName.trim() === '' ||
+    if (extraName.trim() === '' ||
         extraValue.trim() === '') {
         return;
     }
 
     const newMovie = {
         info: {
-            title,
+            set title(val) {
+                if (val.trim() === '') {
+                    this._title = 'DEFAULT';
+                    return;
+                }
+                this._title = val;
+            },
+            get title() {
+                return this._title;
+            },
             [extraName]: extraValue
         },
         id: Math.random().toString(),
-        getFormattedTitle: function () {
+        getFormattedTitle() {
             return this.info.title.toUpperCase(); // Using this to set property to format our title.
         }
     };
+
+    newMovie.info.title = title;
+    console.log(newMovie.info.title)
 
     movies.push(newMovie);
     renderMovies(); // Llamamos a que ponga los datos en la lista cuando demos click al boton.
