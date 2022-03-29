@@ -17,7 +17,17 @@ const renderMovies = () => {
 
     movies.forEach((movie) => {
         const movieEl = document.createElement('li');
-        movieEl.textContent = movie.info.title; // Accedemos al título de la pelicula
+        let text = movie.info.title + ' - ';
+        // This for loop allow us to iterate the object to extract extraName and extraValue
+        for (const key in movie.info) {
+            // if key is not in the title property
+            if (key !== 'title') {
+                // key here is the extraName and in the key's info is extraValue
+                text = text + `${key}: ${movie.info[key]}`;
+            }
+        }
+        // Print the content of extraName and extraValue
+        movieEl.textContent = text;
         movieList.append(movieEl); // Agregamos la pelicula a la lista del html
     })
 }
