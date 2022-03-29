@@ -3,7 +3,7 @@ const searchBtn = document.getElementById('search-btn');
 
 const movies = [];
 
-const renderMovies = () => {
+const renderMovies = (filter = '') => {
     const movieList = document.getElementById('movie-list');
 
     if (movies.length === 0) {
@@ -15,7 +15,12 @@ const renderMovies = () => {
 
     movieList.innerHTML = '';
 
-    movies.forEach((movie) => {
+    // If the filterName input is included it will be show the includes method otherwise it only shows the movies.
+    const filteredMovies = !filter
+        ? movies
+        : movies.filter(movie => movie.info.title.includes(filter));
+
+    filteredMovies.forEach((movie) => {
         const movieEl = document.createElement('li');
         let text = movie.info.title + ' - ';
         // This for loop allow us to iterate the object to extract extraName and extraValue
@@ -48,11 +53,17 @@ const addMovieHandler = () => {
             title,
             [extraName]: extraValue
         },
-        id: Math.random()
+        id: Math.random().toString()
     };
 
     movies.push(newMovie);
     renderMovies(); // Llamamos a que ponga los datos en la lista cuando demos click al boton.
 };
 
+const searchMovieHandler = () => {
+    const filterTerm = document.getElementById('filter-title').value;
+    renderMovies(filterTerm);
+}
+
 addMovieBtn.addEventListener('click', addMovieHandler);
+searchBtn.addEventListener('click', searchMovieHandler);
