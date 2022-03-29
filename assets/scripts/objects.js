@@ -22,13 +22,16 @@ const renderMovies = (filter = '') => {
 
     filteredMovies.forEach((movie) => {
         const movieEl = document.createElement('li');
-        let text = movie.info.title + ' - ';
+        const { info, ...otherProps } = movie; // Object Destructuring
+        console.log(otherProps);
+        const { title: movieTitle } = info;
+        let text = movieTitle + ' - ';
         // This for loop allow us to iterate the object to extract extraName and extraValue
-        for (const key in movie.info) {
+        for (const key in info) {
             // if key is not in the title property
             if (key !== 'title') {
                 // key here is the extraName and in the key's info is extraValue
-                text = text + `${key}: ${movie.info[key]}`;
+                text = text + `${key}: ${info[key]}`;
             }
         }
         // Print the content of extraName and extraValue
